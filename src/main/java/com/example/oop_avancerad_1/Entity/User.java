@@ -3,6 +3,7 @@ package com.example.oop_avancerad_1.Entity;
 import javax.persistence.*;
 
 @Entity
+
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
