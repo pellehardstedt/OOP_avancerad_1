@@ -1,9 +1,6 @@
 package com.example.oop_avancerad_1.Entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -20,8 +17,7 @@ public class User {
     public User(){
     }
 
-    public User(long id, String username, String firstName, String lastName, String password, String salt, String img) {
-        this.id = id;
+    public User(String username, String firstName, String lastName, String password, String salt, String img) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
