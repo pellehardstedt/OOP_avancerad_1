@@ -31,6 +31,10 @@ public class User {
         return userId;
     }
 
+    public String getIdString() {
+        return Long.toString(userId);
+    }
+
     public void setId(long id) {
         this.userId = userId;
     }

@@ -12,6 +12,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Locale;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
 
@@ -28,12 +30,16 @@ public class UserController {
     @PostMapping("/login")
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
-                        Model model
+                        Model model,
+                        HttpServletResponse response
     ){
         User user = userService.getUserByUsername(username);
 
         if(user != null && userService.authUser(username, password)){
-            System.out.println("inside login success");
+            System.out.println("inside login success. user id: " + user.getIdString());
+            Cookie cookie = new Cookie("currentUserId", user.getIdString());
+
+            response.addCookie(cookie);
             return "redirect:/feed";
         }
         return "redirect:/fail";

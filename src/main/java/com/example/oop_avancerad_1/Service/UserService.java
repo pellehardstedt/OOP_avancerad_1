@@ -9,6 +9,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -69,7 +70,10 @@ public class UserService {
         byte[] salt = sr.generateSeed(12);
         return salt;
     }
-
+    public Optional<User> getUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user;
+    }
 
     public User getUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
