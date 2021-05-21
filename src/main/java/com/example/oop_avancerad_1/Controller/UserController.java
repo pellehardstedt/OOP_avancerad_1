@@ -4,6 +4,7 @@ import com.example.oop_avancerad_1.Entity.User;
 import com.example.oop_avancerad_1.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
@@ -19,46 +20,48 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/saveuser")
-    public String saveUser() {
-        User user = new User("username", "firstName", "lastName", "password", "salt", "img");
+    @GetMapping("/")
+    public String index(@ModelAttribute("user") User user){
+        return "index";
+    }
 
-        byte[] salt = generateSalt();
-        String saltString = convertByteToStringForDb(salt);
-        String hashedPass = createSecureHashPass(user.getPassword(), salt);
-        if(!hashedPass.equals("")){
-            user.setSalt(saltString);
-            user.setPassword(hashedPass);
-            userService.saveUser(user);
+    @PostMapping("/login")
+    public String login(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        Model model
+    ){
+        User user = userService.getUserByUsername(username);
+
+        if(user != null && userService.authUser(username, password)){
+            System.out.println("inside login success");
+            return "redirect:/feed";
         }
-        return "redirect:/";
+        return "redirect:/fail";
     }
 
-    private String createSecureHashPass(String password, byte[] salt) {
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-            md.update(salt);
-            byte[] hashedPass = md.digest(password.getBytes());
-            return convertByteToStringForDb(hashedPass);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+
+    @PostMapping("/saveuser")
+    public String saveUser(User user,
+                           @RequestParam("password") String password,
+                           @RequestParam("passwordTwo") String passwordTwo) {
+        if(!password.equals(passwordTwo)){
+            return "redirect:/fail";
         }
-        return "";
+        userService.saveUser(user);
+        return "feed";
     }
 
-    private byte[] convertStringToByteForDb(String stringToByte) {
-        return DatatypeConverter.parseHexBinary(stringToByte);
+    @GetMapping("/success")
+    public String success(@ModelAttribute("user") User user,
+                          Model model){
+        model.addAttribute("msg", "You are registered!");
+        return "index";
     }
 
-    private String convertByteToStringForDb(byte[] byteToString) {
-        return DatatypeConverter.printHexBinary(byteToString).toLowerCase();
+    @GetMapping("/fail")
+    public String failed(@ModelAttribute("user") User user,
+                         Model model){
+        model.addAttribute("msg", "Something went wrong.");
+        return "index";
     }
-
-    private byte[] generateSalt() {
-        SecureRandom sr = new SecureRandom();
-        byte[] salt = sr.generateSeed(12);
-        return salt;
-    }
-
 }

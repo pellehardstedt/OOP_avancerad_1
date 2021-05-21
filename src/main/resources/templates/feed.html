@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feed</title>
+</head>
+<body>
+    <h1>Welcome to the feed</h1>
+    <p th:text="${user.username}"></p>
+
+    <form th:action="@{/savepost}" th:object="${post}" method="POST">
+        <input type="text" placeholder="Text here" th:field="*{text}"><br>
+        <input type="submit" value="Post">
+    </form>
+    <div th:each="post: ${posts}">
+        <p th:text="${post.toString()}"/><br>
+    </div>
+
+</body>
+</html>
