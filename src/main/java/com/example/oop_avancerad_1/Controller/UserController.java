@@ -36,9 +36,7 @@ public class UserController {
         User user = userService.getUserByUsername(username);
 
         if(user != null && userService.authUser(username, password)){
-            System.out.println("inside login success. user id: " + user.getIdString());
             Cookie cookie = new Cookie("currentUserId", user.getIdString());
-
             response.addCookie(cookie);
             return "redirect:/feed";
         }

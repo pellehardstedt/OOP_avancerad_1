@@ -70,8 +70,15 @@ public class UserService {
         byte[] salt = sr.generateSeed(12);
         return salt;
     }
-    public Optional<User> getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
+    public User getUserById(Long id) {
+        Optional<User> userOpt = userRepository.findById(id);
+        User user;
+        if (userOpt.isPresent()) {
+            user = userOpt.get();
+        } else {
+            //TO DO error handling
+            user = null;
+        }
         return user;
     }
 

@@ -27,8 +27,10 @@ public class PostController {
 
 
     @PostMapping("/savepost")
-    public String savePost(@ModelAttribute("post") Post post) {
-        System.out.println(post.getText());
+    public String savePost(@ModelAttribute("post") Post post,
+                           @CookieValue("currentUserId") String currentUserId) {
+        User user = userService.getUserById(Long.parseLong(currentUserId));
+        post.setUser(user);
 
         postService.savePost(post);
         return "redirect:/feed";
