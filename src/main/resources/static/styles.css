@@ -1,0 +1,18 @@
+body {
+    margin: 25px 25px;
+}
+
+.post {
+    margin-top: 10px;
+    border: 1px solid;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.new-post {
+    margin-top: 10px;
+    border: 1px solid;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 40px;
+}

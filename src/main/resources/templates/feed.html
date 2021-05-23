@@ -3,19 +3,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
     <title>Feed</title>
 </head>
 <body>
     <h1>Welcome to the feed</h1>
-    <p th:text="${user.toString()}"></p>
+    <p th:text="${user.username}"></p>
 
-    <form th:action="@{/savepost}" th:object="${post}" method="POST">
+    <form class="new-post" th:action="@{/savepost}" th:object="${post}" method="POST">
         <input type="text" placeholder="Text here" th:field="*{text}"><br>
         <input type="submit" value="Post">
     </form>
-    <div th:each="post: ${posts}">
-        <p th:text="${post.toString()}"/><br>
+
+    <div class="post" th:each="post: ${posts}">
+        <p th:text="${post.user.username}"/>
+        <p th:text="${post.timestamp}"/>
+        <p th:text="${post.text}"/>
     </div>
+    <form th:action="@{/logout}" method="GET"  >
+        <input type="submit" th:action="@{/logout}" method="GET" value="Logout" />
+    </form>
 
 </body>
 </html>

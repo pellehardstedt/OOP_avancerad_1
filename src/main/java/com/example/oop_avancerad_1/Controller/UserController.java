@@ -37,6 +37,7 @@ public class UserController {
 
         if(user != null && userService.authUser(username, password)){
             Cookie cookie = new Cookie("currentUserId", user.getIdString());
+            cookie.setMaxAge(24 * 60 * 60);
             response.addCookie(cookie);
             return "redirect:/feed";
         }
@@ -47,12 +48,16 @@ public class UserController {
     @PostMapping("/saveuser")
     public String saveUser(User user,
                            @RequestParam("password") String password,
-                           @RequestParam("passwordTwo") String passwordTwo) {
+                           @RequestParam("passwordTwo") String passwordTwo,
+                           HttpServletResponse response) {
         if(!password.equals(passwordTwo)){
             return "redirect:/fail";
         }
         userService.saveUser(user);
-        return "feed";
+        Cookie cookie = new Cookie("currentUserId", user.getIdString());
+        cookie.setMaxAge(24 * 60 * 60);
+        response.addCookie(cookie);
+        return "redirect:/feed";
     }
 
     @GetMapping("/success")
@@ -67,5 +72,13 @@ public class UserController {
                          Model model){
         model.addAttribute("msg", "Something went wrong.");
         return "index";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response){
+        Cookie cookie = new Cookie("currentUserId", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }

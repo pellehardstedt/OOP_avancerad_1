@@ -1,6 +1,8 @@
 package com.example.oop_avancerad_1.Entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 public class Post {
@@ -8,19 +10,16 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long postId;
     private String text;
+    private java.sql.Timestamp timestamp;
 
     @ManyToOne(cascade= CascadeType.ALL)
     @JoinColumn(name = "userId")
     private User user;
 
-    public Post(){ }
-
-    public long getId() {
-        return postId;
-    }
-
-    public void setId(long id) {
-        this.postId = id;
+    public Post(){
+        LocalDateTime now = LocalDateTime.now();
+        Timestamp timestamp = Timestamp.valueOf(now);
+        this.timestamp = timestamp;
     }
 
     public String getText() {
@@ -39,11 +38,28 @@ public class Post {
         this.user = user;
     }
 
+    public long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(long postId) {
+        this.postId = postId;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
                 "postId=" + postId +
                 ", text='" + text + '\'' +
+                ", timestamp=" + timestamp +
                 ", user=" + user +
                 '}';
     }
